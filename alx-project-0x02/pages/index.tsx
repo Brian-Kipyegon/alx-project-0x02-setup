@@ -1,7 +1,7 @@
 // pages/index.tsx
 import { useEffect, useState } from "react";
 import Header from "@/components/layout/Header";
-import PostCard from "../components/PostCard";
+import PostCard from "@/components/common/PostCard";
 
 type Post = {
   id: number;
