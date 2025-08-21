@@ -1,16 +1,42 @@
-import Header from "../components/layout/Header";
+// pages/index.tsx
+import { useEffect, useState } from "react";
+import Header from "@/components/layout/Header";
+import PostCard from "../components/PostCard";
 
-export default function HomePage() {
+type Post = {
+  id: number;
+  title: string;
+  body: string;
+};
+
+export default function Home() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=6");
+      const data = await res.json();
+      setPosts(data);
+      setLoading(false);
+    }
+    fetchPosts();
+  }, []);
+
   return (
     <div>
       <Header />
-      <main className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-4xl font-bold text-blue-600">
-          Welcome to Next.js Project Setup 🚀
-        </h1>
-        <p className="mt-4 text-lg text-gray-700">
-          Next.js + TypeScript + Tailwind CSS
-        </p>
+      <main className="max-w-4xl mx-auto p-6">
+        <h1 className="text-3xl font-bold mb-6">Latest Posts</h1>
+        {loading ? (
+          <p>Loading posts...</p>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2">
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
